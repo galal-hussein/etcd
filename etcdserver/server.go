@@ -1551,7 +1551,7 @@ func (s *EtcdServer) stopWithDelay(d time.Duration, err error) {
 // when the server is stopped.
 func (s *EtcdServer) StopNotify() <-chan struct{} { return s.done }
 
-func (s *EtcdServer) ErrNotify() <-chan struct{} { return s.errorc }
+func (s *EtcdServer) ErrNotify() <-chan error { return s.errorc }
 
 func (s *EtcdServer) SelfStats() []byte { return s.stats.JSON() }
 
