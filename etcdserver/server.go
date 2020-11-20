@@ -99,14 +99,14 @@ const (
 	recommendedMaxRequestBytes = 10 * 1024 * 1024
 
 	readyPercent = 0.9
-
-	ErrMemberRemoved = fmt.Errorf("the member has been permanently removed from the cluster")
 )
 
 var (
 	plog = capnslog.NewPackageLogger("go.etcd.io/etcd", "etcdserver")
 
 	storeMemberAttributeRegexp = regexp.MustCompile(path.Join(membership.StoreMembersPrefix, "[[:xdigit:]]{1,16}", "attributes"))
+
+	ErrMemberRemoved = fmt.Errorf("the member has been permanently removed from the cluster")
 )
 
 func init() {
