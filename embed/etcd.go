@@ -64,6 +64,8 @@ const (
 	// in a cluster, so it should reserve 96.
 	// For the safety, we set the total reserved number to 150.
 	reservedInternalFDNum = 150
+
+	ErrMemberRemoved = fmt.Errorf("the member has been permanently removed from the cluster")
 )
 
 // Etcd contains a running etcd server and its listeners.

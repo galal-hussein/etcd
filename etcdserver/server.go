@@ -46,6 +46,7 @@ import (
 	"go.etcd.io/etcd/etcdserver/api/v3compactor"
 	pb "go.etcd.io/etcd/etcdserver/etcdserverpb"
 	"go.etcd.io/etcd/lease"
+	"go.etcd.io/etcd/embed"
 	"go.etcd.io/etcd/lease/leasehttp"
 	"go.etcd.io/etcd/mvcc"
 	"go.etcd.io/etcd/mvcc/backend"
@@ -1388,7 +1389,7 @@ func (s *EtcdServer) applyEntries(ep *etcdProgress, apply *apply) {
 	}
 	var shouldstop bool
 	if ep.appliedt, ep.appliedi, shouldstop = s.apply(ents, &ep.confState); shouldstop {
-		go s.stopWithDelay(10*100*time.Millisecond, fmt.Errorf("the member has been permanently removed from the cluster"))
+		go s.stopWithDelay(10*100*time.Millisecond, embed.ErrMemberRemoved)
 	}
 }
 
