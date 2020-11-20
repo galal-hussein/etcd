@@ -1545,6 +1545,9 @@ func (s *EtcdServer) stopWithDelay(d time.Duration, err error) {
 	}
 	select {
 	case s.errorc <- err:
+		if err.Error() == ErrMemberRemoved.Error() {
+			s.Stop()
+		}
 	default:
 	}
 }
