@@ -1389,7 +1389,7 @@ func (s *EtcdServer) applyEntries(ep *etcdProgress, apply *apply) {
 	}
 	var shouldstop bool
 	if ep.appliedt, ep.appliedi, shouldstop = s.apply(ents, &ep.confState); shouldstop {
-		go s.stopWithDelay(10*100*time.Millisecond, fmt.Errorf("rertest"))
+		go s.stopWithDelay(10*100*time.Millisecond, ErrMemberRemoved)
 	}
 }
 
@@ -1544,9 +1544,6 @@ func (s *EtcdServer) stopWithDelay(d time.Duration, err error) {
 	}
 	select {
 	case s.errorc <- err:
-		//if err.Error() == ErrMemberRemoved.Error() {
-		//	s.Stop()
-		//}
 	default:
 	}
 }
