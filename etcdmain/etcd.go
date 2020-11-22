@@ -75,7 +75,8 @@ func startEtcdOrProxyV2() {
 				plog.Errorf("When listening on specific address(es), this etcd process must advertise accessible url(s) to each connected client.")
 			}
 		}
-		os.Exit(1)
+		writeErrorCodeAndExit(cfg.ec.Dir, 1, lg)
+		//os.Exit(1)
 	}
 
 	if lg == nil {
@@ -235,7 +236,7 @@ func startEtcdOrProxyV2() {
 					plog.Infof("please generate a new discovery token and try to bootstrap again.")
 				}
 			}
-			os.Exit(1)
+			writeErrorCodeAndExit(cfg.ec.Dir, 1, lg)
 		}
 
 		if strings.Contains(err.Error(), "include") && strings.Contains(err.Error(), "--initial-cluster") {
@@ -265,7 +266,7 @@ func startEtcdOrProxyV2() {
 					plog.Infof("if you want to use discovery service, please set --discovery flag.")
 				}
 			}
-			os.Exit(1)
+			writeErrorCodeAndExit(cfg.ec.Dir, 1, lg)
 		}
 		if lg != nil {
 			lg.Fatal("discovery failed", zap.Error(err))
@@ -286,7 +287,7 @@ func startEtcdOrProxyV2() {
 	select {
 	case errc := <- lerrc:
 		if strings.Contains(errc.Error(), etcdserver.ErrMemberRemoved.Error()) {
-			osutil.Exit(59)
+			writeErrorCodeAndExit(cfg.ec.Dir, 10, lg)
 		}
 	case lerr := <-errc:
 		// fatal out on listener errors
@@ -619,6 +620,21 @@ func checkSupportArch() {
 		return
 	}
 
-	fmt.Printf("etcd on unsupported platform without ETCD_UNSUPPORTED_ARCH=%s set\n", runtime.GOARCH)
+	fmt.Printf("etcd on itunsupported platform without ETCD_UNSUPPORTED_ARCH=%s set\n", runtime.GOARCH)
 	os.Exit(1)
+}
+
+
+func writeErrorCodeAndExit(dataDir string, errorCode int, lg *zap.Logger) {
+	errorCodeFile := filepath.Join(dataDir, "errorcode")
+	if err := ioutil.WriteFile(errorCodeFile, []byte(string(errorCode)), 0600); err != nil {
+		if lg != nil {
+			lg.Fatal(
+				"failed to write error code file to ",
+				zap.String("error-code-file", errorCodeFile)
+			)
+		} else {
+			plog.Fatalf("failed to write error code file %s",errorCodeFile)
+		}
+	}
 }
