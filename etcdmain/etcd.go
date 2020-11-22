@@ -23,6 +23,7 @@ import (
 	"path/filepath"
 	"reflect"
 	"runtime"
+	"strconv"
 	"strings"
 	"time"
 
@@ -627,7 +628,7 @@ func checkSupportArch() {
 
 func writeErrorCodeAndExit(dataDir string, errorCode int, lg *zap.Logger) {
 	errorCodeFile := filepath.Join(dataDir, "errorcode")
-	if err := ioutil.WriteFile(errorCodeFile, []byte(string(errorCode)), 0600); err != nil {
+	if err := ioutil.WriteFile(errorCodeFile, []byte(strconv.Itoa(errorCode)), 0600); err != nil {
 		if lg != nil {
 			lg.Fatal(
 				"failed to write error code file",
