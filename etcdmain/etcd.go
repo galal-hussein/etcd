@@ -285,12 +285,9 @@ func startEtcdOrProxyV2() {
 
 	select {
 	case errc := <- lerrc:
-		if lg != nil {
-			lg.Info(zap.Error(errc).String)
-		} else {
-			plog.Info(errc)
+		if strings.Contains(errc.Error(), etcdserver.ErrMemberRemoved.Error()) {
+			osutil.Exit(59)
 		}
-		osutil.Exit(59)
 	case lerr := <-errc:
 		// fatal out on listener errors
 		if lg != nil {
