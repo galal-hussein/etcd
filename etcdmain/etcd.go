@@ -630,7 +630,7 @@ func writeErrorCodeAndExit(dataDir string, errorCode int, lg *zap.Logger) {
 	if err := ioutil.WriteFile(errorCodeFile, []byte(string(errorCode)), 0600); err != nil {
 		if lg != nil {
 			lg.Fatal(
-				"failed to write error code file to ",
+				"failed to write error code file",
 				zap.String("error-code-file", errorCodeFile),
 			)
 		} else {
