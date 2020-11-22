@@ -631,7 +631,7 @@ func writeErrorCodeAndExit(dataDir string, errorCode int, lg *zap.Logger) {
 		if lg != nil {
 			lg.Fatal(
 				"failed to write error code file to ",
-				zap.String("error-code-file", errorCodeFile)
+				zap.String("error-code-file", errorCodeFile),
 			)
 		} else {
 			plog.Fatalf("failed to write error code file %s",errorCodeFile)
