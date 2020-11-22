@@ -284,12 +284,13 @@ func startEtcdOrProxyV2() {
 	notifySystemd(lg)
 
 	select {
-	case lerrc := <- lerrc:
+	case errc := <- lerrc:
 		if lg != nil {
-			lg.Info(zap.Error(lerrc))
+			lg.Info(zap.Error(errc).String)
 		} else {
-			plog.Info(lerrc)
+			plog.Info(errc)
 		}
+		osutil.Exit(59)
 	case lerr := <-errc:
 		// fatal out on listener errors
 		if lg != nil {
@@ -297,7 +298,6 @@ func startEtcdOrProxyV2() {
 		} else {
 			plog.Fatal(lerr)
 		}
-		osutil.Exit(59)
 	case <-stopped:
 	}
 
