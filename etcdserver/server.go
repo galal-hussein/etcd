@@ -2679,11 +2679,11 @@ func (s *EtcdServer) IsLearner() bool {
 	tombstoneFile := filepath.Join(s.Cfg.DataDir, "tombstone")
 	if _, err := os.Stat(tombstoneFile); err == nil {
 		if lg := s.getLogger(); lg != nil {
-			lg.Warn("this server has been removed from the cluster, to rejoin please restart the server"))
+			lg.Warn("this server has been removed from the cluster, to rejoin please restart the server")
 		} else {
-			plog.Warning("this server has been removed from the cluster, to rejoin please restart the server"))
+			plog.Warning("this server has been removed from the cluster, to rejoin please restart the server")
 		}
-		return errors.New(
+		return false
 	}
 	return s.cluster.IsLocalMemberLearner()
 }
