@@ -627,15 +627,15 @@ func checkSupportArch() {
 
 
 func writeErrorCodeAndExit(dataDir string, errorCode int, lg *zap.Logger) {
-	errorCodeFile := filepath.Join(dataDir, "errorcode")
+	errorCodeFile := filepath.Join(dataDir, "tombstone")
 	if err := ioutil.WriteFile(errorCodeFile, []byte(strconv.Itoa(errorCode)), 0600); err != nil {
 		if lg != nil {
 			lg.Fatal(
-				"failed to write error code file",
-				zap.String("error-code-file", errorCodeFile),
+				"failed to write tombstone file",
+				zap.String("tombstone-file", errorCodeFile),
 			)
 		} else {
-			plog.Fatalf("failed to write error code file %s",errorCodeFile)
+			plog.Fatalf("failed to write tombstone file %s",errorCodeFile)
 		}
 	}
 }
